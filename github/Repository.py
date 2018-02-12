@@ -1485,7 +1485,8 @@ class Repository(github.GithubObject.CompletableGithubObject):
                 github.ContentFile.ContentFile(self._requester, headers, attributes, completed=(attributes["type"] != "file")) for attributes in data
             ]
         except Exception as e:
-            print('get_dir_contents: ', e)
+            #print(e)
+            pass
         return data
 
     def get_contributors(self):
