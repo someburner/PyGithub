@@ -1479,11 +1479,14 @@ class Repository(github.GithubObject.CompletableGithubObject):
                 headers['location'],
                 parameters=url_parameters
             )
-
-        return [
-            github.ContentFile.ContentFile(self._requester, headers, attributes, completed=(attributes["type"] != "file"))  # Lazy completion only makes sense for files. See discussion here: https://github.com/jacquev6/PyGithub/issues/140#issuecomment-13481130
-            for attributes in data
-        ]
+        try:
+            return [
+                # Lazy completion only makes sense for files. See discussion here: https://github.com/jacquev6/PyGithub/issues/140#issuecomment-13481130
+                github.ContentFile.ContentFile(self._requester, headers, attributes, completed=(attributes["type"] != "file")) for attributes in data
+            ]
+        except Exception as e:
+            print('get_dir_contents: ', e)
+        return data
 
     def get_contributors(self):
         """
